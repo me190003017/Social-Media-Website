@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-const passportLocalMongoose = require('passport-local-mongoose');
-//Passport-Local Mongoose is a Mongoose plugin that simplifies building username and password login with Passport.
+
 
 const postSchema=new mongoose.Schema({
     content:{
