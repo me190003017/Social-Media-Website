@@ -12,11 +12,7 @@
 
             <h2 class="display-6 mb-3">Create your account</h2>
 
-            <div class="mb-3">
-                <%if(message && message.length){%>
-                    <p><%= message %></p>
-                <%}%>
-            </div>
+            <%- include("../partials/flash") %>
 
             <form action="/register" method="POST">
                 <div class="mb-3">
@@ -39,7 +35,10 @@
                 <div class="d-grid gap-2">
                     <button class="btn btn-primary" type="submit">Sign Up</button>
                 </div>
-            </form>
+                <div class="mb-3 mt-3">
+                    <p><a href="/login">Login In to Existing Acount</a></p>
+                </div>
+            </form>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
         </div>
         <div class="col-lg-3"></div>
     </div>

@@ -8,16 +8,8 @@
     <!-- bootstrap is mobile first -->
     <div class="row">
 
-        <nav class="col-2">
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fas fa-home"></i></a>
-            <a href="#"><i class="fas fa-search"></i></a>
-            <a href="#"><i class="fas fa-bell"></i></a>
-            <a href="#"><i class="far fa-envelope"></i></a>
-            <a href="#"><i class="fas fa-user"></i></a>
-            <a href="#"><i class="fas fa-sign-out-alt"></i></a>
-        </nav>
-
+      
+        <%- include("../partials/navbar") %>
         <div class="mainContainer col-10 col-md-8 col-lg-6">
 
             <h1 class="fw-bold titleContainer">Home</h1>
@@ -36,7 +28,7 @@
             </div>
 
             <div class="mb-3">
-                <ul id="allTweets"></ul>
+                <div class="postsContainer"></div>
             </div>
 
         </div>

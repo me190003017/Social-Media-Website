@@ -23,9 +23,15 @@ const userSchema=new mongoose.Schema({
     profilePic:{
         type:String,
         default:'/images/profilePic.jpeg'
-    }
+    },
+    likes:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Post'
+        }
+    ]
 
-})
+},{timestamps:true})
 
 // look documentation
 // First you need to plugin Passport-Local Mongoose into your User schema

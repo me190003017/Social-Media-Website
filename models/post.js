@@ -9,11 +9,16 @@ const postSchema=new mongoose.Schema({
         // schema validation
     },
     postedBy:{
-        type:String,
-        trim:true,
-        required:true      
-    }
-})
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User'     
+    },
+    likes:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User'
+        }
+    ]
+},{timestamps:true})
 
 
 
