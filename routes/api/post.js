@@ -6,22 +6,37 @@ const User=require('../../models/user')
 
 // To get all posts
 router.get('/api/post',isLoggedIn,async(req,res)=>{
-    const posts=await Post.find({}).populate('postedBy');
+    const results=await Post.find({}).populate('postedBy').populate('replyTo');
+    posts=await User.populate(results,{path:"replyTo.postedBy"});
     res.json(posts);
+})
+// get post that id
+router.get('/api/posts/:id',isLoggedIn,async(req,res)=>{
+    const post=await Post.findById(req.params.id).populate('postedBy');
+    res.json(post);
 })
 
 
 // To add new post
 router.post('/api/post',isLoggedIn,async(req,res)=>{
-    const post={
+    let post={
         content:req.body.content,
         postedBy:req.user
+    }
+    if(req.body.replyTo){
+        post={
+            ...post,
+            replyTo:req.body.replyTo
+        }
+        console.log("reply to "+req.body.replyTo)
     }
     // new post created and added to dataset
     const newPost=await Post.create(post)
   
     res.json(newPost)
 })
+
+
 
 router.patch('/api/posts/:id/like',isLoggedIn,async(req,res)=>{
    const postId=req.params.id;

@@ -5,7 +5,7 @@ const passport = require('passport');
 
 
 router.get('/register',(req,res)=>{
-    res.render("auth/signup",{message:req.flash('error')})
+    res.render("auth/signup")
 })
 
 
@@ -20,7 +20,9 @@ router.post('/register', async (req,res)=>{
             username:req.body.username
          }
     const newUser=await User.register(user,req.body.password)
-    res.status(200).send(newUser)
+    req.flash("success","Registered Successfully,Please Login to continue")
+    res.redirect('/login');
+   
     }
     catch(e){
         req.flash('error',e.message);

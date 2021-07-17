@@ -15,7 +15,7 @@ refreshPosts();
 // creating a new post
 $('#submitPostButton').click(async()=>{
     const postText=$('#post-text').val();
-    console.log(postText)
+    // console.log(postText)
     const newPost=await axios.post('/api/post',{content:postText}).catch((err)=>console.log(err))
     console.log(newPost)
     $('#post-text').val("");
@@ -28,8 +28,29 @@ $(document).on('click','.likeButton',async(e)=>{
     const postId=getPostIdFromElement(button);
     
     const postData=await axios.patch(`/api/posts/${postId}/like`);
-    console.log(postData);
+    // console.log(postData);
 })
+
+$("#replyModal").on('show.bs.modal',async(e)=>{
+    const button=$(e.relatedTarget);
+    const postId=getPostIdFromElement(button);
+    $('#submitReplyButton').attr('data-id',postId);
+    
+    // I will simply send get request
+    const postData=await axios.get(`/api/posts/${postId}`)
+    const html=createPostHtml(postData.data);
+    $('#originalPostContainer').empty();
+    $('#originalPostContainer').append(html);
+})
+
+$('#submitReplyButton').click(async(e)=>{
+    const element=$(e.target);
+    const postText=$('#reply-text-container').val();
+    const replyTo=element.attr('data-id');
+    const postData= await axios.post('/api/post',{content:postText,replyTo:replyTo})
+    location.reload();
+})
+
 // function to get id of post from element
 function getPostIdFromElement(element){
     // first let's check whether current element is root or not
@@ -46,14 +67,26 @@ function createPostHtml(postData) {
     
     const postedBy = postData.postedBy;
 
-    if(postedBy._id === undefined) {
+    if(postedBy===undefined || postedBy._id === undefined) {
         return console.log("User object not populated");
     }
 
     const displayName = postedBy.firstName + " " + postedBy.lastName;
     const timestamp = timeDifference(new Date(),new Date(postData.createdAt));
+    
+    let replyFlag = "";
+  if (postData.replyTo && postData.replyTo._id) {
+    if (!postData.replyTo._id) {
+      return alert("Reply to is not populated");
+    } else if (!postData.replyTo.postedBy._id) {
+      return alert("Posted by is not populated");
+    }
 
-
+    const replyToUsername = postData.replyTo.postedBy.username;
+    replyFlag = `<div class='replyFlag'>
+                          Replying to <a href='/profile/${replyToUsername}'>@${replyToUsername}<a>
+                      </div>`;
+  }
     return `<div class='post' data-id='${postData._id}'>
 
                 <div class='mainContentContainer'>
@@ -65,13 +98,15 @@ function createPostHtml(postData) {
                             <a href='/profile/${postedBy.username}' class='displayName'>${displayName}</a>
                             <span class='username'>@${postedBy.username}</span>
                             <span class='date'>${timestamp}</span>
+                            <div>${replyFlag}</div>
+                        
                         </div>
                         <div class='postBody'>
                             <span>${postData.content}</span>
                         </div>
                         <div class='postFooter'>
                             <div class='postButtonContainer'>
-                                <button>
+                                <button data-bs-toggle="modal" data-bs-target="#replyModal">
                                     <i class='far fa-comment'></i>
                                 </button>
                             </div>

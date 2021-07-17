@@ -57,16 +57,22 @@ passport.deserializeUser(User.deserializeUser());
 
 
 
-app.use(authRouters)
 
-// using apis
-app.use(postsApiRoute)
-
-
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    res.locals.currentUser = req.user;
+    next();
+})
 app.get('/',isLoggedIn,(req,res)=>{
     res.render("layouts/main_layout");
 })
 
+
+app.use(authRouters)
+
+// using apis
+app.use(postsApiRoute)
 
 app.listen(3003,()=>{
     console.log('app is listening on 3003 port'+'\nclick here http://localhost:3003/')

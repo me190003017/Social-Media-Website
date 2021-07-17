@@ -137,3 +137,9 @@ textarea:focus{
   .postFooter .postButtonContainer button {
     padding: 2px 5px;
   }
+
+  .modal .postContainer{
+    border: none;
+    padding: 0;
+    padding-top: var(--spacing);
+  }
