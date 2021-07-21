@@ -1,66 +1,32 @@
+$(document).ready(()=>{
+    loadPosts()
+})
 
-async function refreshPosts(){
-    $('.postsContainer').empty();
-    const tweets = await axios.get('/api/post').catch((err)=>console.log(err))
-    // console.log(tweets)
-    for(let post of tweets.data){
-        const html=createPostHtml(post)
-        $('.postsContainer').prepend(html)
+async function loadPosts(){
+    const posts=await axios.get('/api/post',{params:{postedBy:profileUserId}})//this is how we send query parameter to axios
+    // console.log(posts)
+    // console.log(profileUserId)
+    if(flag==='posts'){
+        for(let post of posts.data){
+            const html=createPostHtml(post)
+            $('.userPostsContainer').prepend(html)
+        }
+    }else{
+        
+        for(let post of posts.data){
+            if(post.replyTo===undefined){
+                //
+            }else{
+                const html=createPostHtml(post)
+                $('.userPostsContainer').prepend(html)
+            }
+        }
     }
+
 }
 
+// if(post.replyTo!==undefined || post.replyTo._id !== undefined)
 
-refreshPosts();
-
-// creating a new post
-$('#submitPostButton').click(async()=>{
-    const postText=$('#post-text').val();
-    // console.log(postText)
-    const newPost=await axios.post('/api/post',{content:postText}).catch((err)=>console.log(err))
-    console.log(newPost)
-    $('#post-text').val("");
-    refreshPosts();
-})
-
-// .on method on whole documnet and click on likeButton we are using this because it work dynamically when we create new elements
-$(document).on('click','.likeButton',async(e)=>{
-    const button=$(e.target); // we are getting button 
-    const postId=getPostIdFromElement(button);
-    
-    const postData=await axios.patch(`/api/posts/${postId}/like`);
-    // console.log(postData);
-})
-
-$("#replyModal").on('show.bs.modal',async(e)=>{
-    const button=$(e.relatedTarget);
-    const postId=getPostIdFromElement(button);
-    $('#submitReplyButton').attr('data-id',postId);
-    
-    // I will simply send get request
-    const postData=await axios.get(`/api/posts/${postId}`)
-    const html=createPostHtml(postData.data);
-    $('#originalPostContainer').empty();
-    $('#originalPostContainer').append(html);
-})
-
-$('#submitReplyButton').click(async(e)=>{
-    const element=$(e.target);
-    const postText=$('#reply-text-container').val();
-    const replyTo=element.attr('data-id');
-    const postData= await axios.post('/api/post',{content:postText,replyTo:replyTo})
-    location.reload();
-})
-
-// function to get id of post from element
-function getPostIdFromElement(element){
-    // first let's check whether current element is root or not
-    const isRoot=element.hasClass('post');
-    const rootElement=isRoot==true ? element : element.closest('.post')
-    // now let's grab id of post
-    const postId=rootElement.data().id;
-    
-    return postId
-}
 
 // create html for created post
 function createPostHtml(postData) {

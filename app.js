@@ -33,7 +33,7 @@ app.use(express.json()) // to parse json data
 
 // Routes 
 const authRouters=require('./routes/authRoutes')
-
+const profileRouter=require('./routes/profile')
 // APIs
 const postsApiRoute=require('./routes/api/post')
 
@@ -73,6 +73,7 @@ app.use(authRouters)
 
 // using apis
 app.use(postsApiRoute)
+app.use(profileRouter)
 
 app.listen(3003,()=>{
     console.log('app is listening on 3003 port'+'\nclick here http://localhost:3003/')

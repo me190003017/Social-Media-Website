@@ -1,4 +1,4 @@
-<%- include("../partials/header") %>
+<%- include("./partials/header") %>
 <script src="https://kit.fontawesome.com/6399affceb.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="/css/main.css">
 </head>
@@ -7,17 +7,68 @@
 <div class="container">
     <!-- bootstrap is mobile first -->
     <div class="row">      
-        <%- include("../partials/navbar") %>
-        <div class="mainContainer col-10 col-md-8 col-lg-6">
-            <h1 class="fw-bold titleContainer">Profile</h1>
-            
+        <%- include("./partials/navbar") %>
+        <div class="mainSectionContainer col-10 col-md-8 col-lg-6">
+            <div  class="titleContainer">
+                <h1><%=payload.displayName %></h1>
+            </div>
+           <script>
+               var profileUserId='<%=payload.user._id %>';
+               var flag='<%= payload.flag%>'
+            //    var selectionTab='';
+           </script>
+            <div class="profileHeaderContainer">
+                <div class="coverPhotoSection">
+                    <div class="coverPhotoContainer">
 
+                    </div>
+                    <div class="userImageContainer">
+                        <img src="/images/profilePic.jpeg" alt="User profile phote">
+                    </div>
+                </div>
+                <div class="profileButtonsContainer"></div>
+                <div class="userDetailsContainer">
+                    <span class="displayName"><%=payload.displayName%></span>
+                    <span class="username">@<%=payload.user.username%></span>
+                    <span class="joiningdata"><svg viewBox="0 0 24 24" aria-hidden="true" class="r-14j79pv r-4qtqp9 r-yyyyoo r-1xvli5t r-1d4mawv r-dnmrzs r-bnwqim r-1plcrui r-lrvibr"><g><path d="M19.708 2H4.292C3.028 2 2 3.028 2 4.292v15.416C2 20.972 3.028 22 4.292 22h15.416C20.972 22 22 20.972 22 19.708V4.292C22 3.028 20.972 2 19.708 2zm.792 17.708c0 .437-.355.792-.792.792H4.292c-.437 0-.792-.355-.792-.792V6.418c0-.437.354-.79.79-.792h15.42c.436 0 .79.355.79.79V19.71z"></path><circle cx="7.032" cy="8.75" r="1.285"></circle><circle cx="7.032" cy="13.156" r="1.285"></circle><circle cx="16.968" cy="8.75" r="1.285"></circle><circle cx="16.968" cy="13.156" r="1.285"></circle><circle cx="12" cy="8.75" r="1.285"></circle><circle cx="12" cy="13.156" r="1.285"></circle><circle cx="7.032" cy="17.486" r="1.285"></circle><circle cx="12" cy="17.486" r="1.285"></circle></g></svg><%=payload.joiningdate %></span>
+                    <span class="description"></span>
+                    <div class="followersContainer">
+                        <a href="/profile/ms/following">
+                            <span class="value">0</span>
+                            <span>Following</span>
+                        </a>
+                        <a href="/profile/ms/followers">
+                            <span class="value" id="followersValue">0</span>
+                            <span>Followers</span>
+                        </a>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="tabsContainer">
+                <a class="tab active" href="/profile/<%=payload.user.username%>">
+                    <span>Posts</span>
+                </a>
+                <a class="tab" href="/profile/<%=payload.user.username%>/replies">
+                    <span>Replies</span>
+                </a>
+                <a class="tab" href="/profile/<%=payload.user.username%>/likes">
+                    <span>Likes</span>
+                </a>
+            </div>
+            <div class="pinnedPostContainer" style="display: none;"></div>
+            <div class="userPostsContainer">
+
+            </div>
         </div>
         <div class="d-none d-md-block col-md-2 col-lg-4">
             Third div
         </div>
     </div>
 </div>
-<script src="/js/common.js"></script>
 
-<%- include("../partials/footer") %>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/jQuery.js"></script>
+<script src="/js/profile.js"></script>
+<script src="/js/common.js"></script>
+<%- include("./partials/footer") %>
