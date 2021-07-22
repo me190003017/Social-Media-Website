@@ -14,7 +14,8 @@ router.get('/api/post',isLoggedIn,async(req,res)=>{
 })
 // get post that id
 router.get('/api/posts/:id',isLoggedIn,async(req,res)=>{
-    const post=await Post.findById(req.params.id).populate('postedBy');
+    const result=await Post.findById(req.params.id).populate('postedBy').populate('replyTo');
+    post=await User.populate(result,{path:"replyTo.postedBy"});
     res.json(post);
 })
 
@@ -30,7 +31,7 @@ router.post('/api/post',isLoggedIn,async(req,res)=>{
             ...post,
             replyTo:req.body.replyTo
         }
-        console.log("reply to "+req.body.replyTo)
+        // console.log("reply to "+req.body.replyTo)
     }
     // new post created and added to dataset
     const newPost=await Post.create(post)
@@ -51,6 +52,16 @@ router.patch('/api/posts/:id/like',isLoggedIn,async(req,res)=>{
     // Now same work for post
     const post=await Post.findByIdAndUpdate(postId,{[option]:{likes:userId}});
     res.status(200).json(post);
+})
+
+router.get('/profile/user',async(req,res)=>{
+    // console.log(req.query)
+    const filter=req.query.postedBy;
+    // console.log(filter)
+    const result=await User.findById(filter).populate('likes') ; 
+    // posts=await User.populate(results,{path:"replyTo.postedBy"});
+    // console.log(result)
+    res.json(result);
 })
 
 module.exports=router;

@@ -45,14 +45,15 @@
                 </div>
                 
             </div>
+
             <div class="tabsContainer">
-                <a class="tab active" href="/profile/<%=payload.user.username%>">
+                <a class="tab tab-post" href="/profile/<%=payload.user.username%>">
                     <span>Posts</span>
                 </a>
-                <a class="tab" href="/profile/<%=payload.user.username%>/replies">
+                <a class="tab tab-reply" href="/profile/<%=payload.user.username%>/replies">
                     <span>Replies</span>
                 </a>
-                <a class="tab" href="/profile/<%=payload.user.username%>/likes">
+                <a class="tab tab-like" href="/profile/<%=payload.user.username%>/likes">
                     <span>Likes</span>
                 </a>
             </div>

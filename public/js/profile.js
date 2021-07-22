@@ -1,23 +1,53 @@
 $(document).ready(()=>{
     loadPosts()
 })
-
+// tab-post
+// tab-reply
+// tab-like
 async function loadPosts(){
-    const posts=await axios.get('/api/post',{params:{postedBy:profileUserId}})//this is how we send query parameter to axios
+   let posts=await axios.get('/api/post',{params:{postedBy:profileUserId}})//this is how we send query parameter to axios
+    // console.log(posts)
     // console.log(posts)
     // console.log(profileUserId)
     if(flag==='posts'){
+        
+            $('.tab-like').removeClass('active')
+            $('.tab-reply').removeClass('active')
+            $('.tab-post').addClass('active')
         for(let post of posts.data){
+            // console.log(post)
             const html=createPostHtml(post)
             $('.userPostsContainer').prepend(html)
         }
     }else{
-        
-        for(let post of posts.data){
-            if(post.replyTo===undefined){
-                //
-            }else{
-                const html=createPostHtml(post)
+        if(flag=='replies'){
+            $('.tab-post').removeClass('active')
+            $('.tab-like').removeClass('active')
+            $('.tab-reply').addClass('active')
+
+            for(let post of posts.data){
+                if(post.replyTo===undefined){
+                    //
+                }else{
+                    const html=createPostHtml(post)
+                    $('.userPostsContainer').prepend(html)
+                }
+            }
+        }else{
+            $('.tab-post').removeClass('active')
+            $('.tab-reply').removeClass('active')
+            $('.tab-like').addClass('active')
+            
+            // console.log(flag,profileUserId)
+            //likes 
+            const user=await axios.get('/profile/user',{params:{postedBy:profileUserId}});
+            posts=user.data.likes;
+            console.log(posts)
+            // console.log(posts[0]._id)
+            for(let i=0;i<posts.length;i++){
+                const x=await axios.get(`/api/posts/${posts[i]._id}`);
+                // console.log(x.data);
+                const html=createPostHtml(x.data)
                 $('.userPostsContainer').prepend(html)
             }
         }
